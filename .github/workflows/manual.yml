@@ -2,30 +2,30 @@ name: Cypress Tests
 
 on:
   push:
-    branches: [ main ]   # Run tests when code is pushed to main
+    branches: [ main ]
   pull_request:
-    branches: [ main ]   # Run tests on pull requests into main
-  workflow_dispatch:     # Also allow manual trigger
+    branches: [ main ]
+  workflow_dispatch:
 
 jobs:
   cypress-run:
     runs-on: ubuntu-latest
 
     steps:
-      # 1. Checkout the repository code
-      - name: Checkout
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
 
-      # 2. Setup Node.js (required for Cypress)
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
+      - uses: actions/setup-node@v4
         with:
           node-version: 22
 
-      # 3. Install dependencies
       - name: Install dependencies
-        run: npm install
+        run: npm ci
 
-      # 4. Run Cypress tests
+      - name: Install Cypress binary
+        run: npx cypress install
+
+      - name: Verify Cypress binary
+        run: npx cypress verify
+
       - name: Run Cypress tests
         run: npx cypress run
